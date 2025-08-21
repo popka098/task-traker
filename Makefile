@@ -10,7 +10,9 @@ stop:
 
 # Установка пакетов
 install:
-	# Установка python-пакетов для FastAPI
-	cd fastapi-backend && python -m pip install -r requirements.txt
-	# Установка npm-пакетов для Vue
+	# Создание виртуального окружения для FastAPI
+	cd fastapi-backend && [ -d .venv ] || python -m venv .venv
+	# Установка python-пакетов
+	cd fastapi-backend && .venv/bin/pip install --upgrade pip && .venv/bin/pip install -r requirements.txt
+	# Установка npm-пакетов
 	cd vue-frontend && npm install
