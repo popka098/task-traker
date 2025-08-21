@@ -1,7 +1,6 @@
 # Запуск одновременно fastapi и vue
 dev:
-	deactivate && source fastapi-backend/.venv/bin/activate & \
-	cd fastapi-backend && uvicorn main:app --reload & \
+	cd fastapi-backend && python main.py & \
 	cd vue-frontend && npm run dev
 
 # Остановка всех uvicorn и vite процессов
