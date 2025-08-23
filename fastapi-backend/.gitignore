@@ -21,3 +21,4 @@ htmlcov/
 
 # --- DataBase ---
 *.sqlite3
+versions/
