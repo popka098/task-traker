@@ -1,7 +1,10 @@
-from models.base import BaseModel
-from sqlmodel import Field, SQLModel, Relationship
-from pydantic import EmailStr
 from typing import List
+
+from models.base import BaseModel
+from models.global_task_user_link import GlobalTaskUserLink
+from pydantic import EmailStr
+from sqlmodel import Field, Relationship, SQLModel
+
 
 class User(BaseModel, table=True):
     """Модель пользователя
@@ -27,7 +30,12 @@ class User(BaseModel, table=True):
     email : EmailStr = Field(unique=True)
     is_staff : bool = Field(default=False)
     is_admin : bool = Field(default=False)
+
     global_resp : List["GlobalTask"] = Relationship(back_populates="resp")
+    global_tasks: List["GlobalTask"] = Relationship(
+        back_populates="workers",
+        link_model=GlobalTaskUserLink
+    )
 
 class UserCreate(SQLModel):
     name : str = Field(
@@ -43,7 +51,7 @@ class UserCreate(SQLModel):
     email : EmailStr = Field(unique=True)
 
 class UserUpdate(UserCreate):
-    pass
+    ...
 
 class UserRead(UserCreate):
     id : int
