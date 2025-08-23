@@ -13,7 +13,7 @@ class User(BaseModel, table=True):
         max_length=255,
         unique=True
     )
-    email : EmailStr
+    email : EmailStr = Field(unique=True)
     is_stuff : bool = Field(default=False)
     is_admin : bool = Field(default=False)
 
@@ -28,7 +28,7 @@ class UserCreate(SQLModel):
         max_length=255,
         unique=True
     )
-    email : EmailStr
+    email : EmailStr = Field(unique=True)
 
 class UserUpdate(UserCreate):
     pass
