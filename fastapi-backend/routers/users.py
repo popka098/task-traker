@@ -5,7 +5,7 @@ from database import get_session
 
 from models.user import User, UserCreate, UserUpdate, UserRead
 from models.global_task import GlobalTask, GlobalTaskRead
-from models.global_task_user_link import GlobalTaskUserLink
+from models.many_to_many_links.global_task_user_link import GlobalTaskUserLink
 
 from typing import Annotated
 
