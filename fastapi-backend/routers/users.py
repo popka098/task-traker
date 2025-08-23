@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from sqlmodel import Session, select
 from database import get_session
+
 from models.user import User, UserCreate, UserUpdate, UserRead
+from models.global_task import GlobalTask, GlobalTaskRead
 
 from typing import Annotated
 
@@ -53,3 +55,12 @@ def update_user(id: int, session: SessionDep, new_user: UserUpdate) -> User:
     session.commit()
     session.refresh(user)
     return user
+
+@router.get("/{id}/resp-globaltasks", response_model=list[GlobalTaskRead], tags=["Users with tasks"])
+def read_resp_global_tasks(id: int, session: SessionDep) -> list[GlobalTaskRead]:
+    if not session.get(User, id):
+        raise HTTPException(status_code=404, detail="User not found")
+
+    statement = select(GlobalTask).where(GlobalTask.resp_id == id)
+    res = session.exec(statement).all()
+    return res
