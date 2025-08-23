@@ -20,6 +20,7 @@ class GlobalTask(Task, table=True):
         back_populates="global_tasks",
         link_model=GlobalTaskUserLink
     )
+    subtasks: List["SubTask"] = Relationship(back_populates="global_task")
 
 class GlobalTaskCreate(SQLModel):
     name : str = Field(min_length=3, max_length=255, index=True)

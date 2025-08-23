@@ -2,6 +2,7 @@ from typing import List
 
 from models.base import BaseModel
 from models.global_task_user_link import GlobalTaskUserLink
+from models.subtask_user_link import SubTaskUserLink
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -35,6 +36,10 @@ class User(BaseModel, table=True):
     global_tasks: List["GlobalTask"] = Relationship(
         back_populates="workers",
         link_model=GlobalTaskUserLink
+    )
+    subtasks: List["SubTask"] = Relationship(
+        back_populates="workers",
+        link_model=SubTaskUserLink
     )
 
 class UserCreate(SQLModel):
