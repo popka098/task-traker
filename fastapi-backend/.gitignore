@@ -18,3 +18,6 @@ htmlcov/
 
 # --- FastAPI / Uvicorn ---
 *.pid
+
+# --- DataBase ---
+*.sqlite3
