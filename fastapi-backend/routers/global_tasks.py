@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from database import get_session
 
-from models.global_task import GlobalTask, GlobalTaskCreate, GlobalTaskRead
+from models.global_task import GlobalTask, GlobalTaskCreate, GlobalTaskRead, GlobalTaskUpdate
 from models.subtask import SubTask
 
 from typing import Annotated
@@ -41,3 +41,18 @@ def delete_global_task(id:int, session: SessionDep):
     session.delete(global_task)
     session.commit()
     return {"ok": True}
+
+@router.patch("/{id}")
+def update_global_task(id:int, session:SessionDep, new_task: GlobalTaskUpdate) -> GlobalTask:
+    global_task = session.get(GlobalTask, id)
+    if not global_task:
+        raise HTTPException(404, "GlobalTask not found")
+
+    task_data = new_task.model_dump(exclude_unset=True)
+    for key, value in task_data.items():
+        setattr(global_task, key, value)
+
+    session.add(global_task)
+    session.commit()
+    session.refresh(global_task)
+    return global_task
