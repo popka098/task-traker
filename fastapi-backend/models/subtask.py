@@ -21,13 +21,12 @@ class SubTask(Task, table=True):
     global_task_id : int | None = Field(default=None, foreign_key="globaltask.id")
     global_task: "GlobalTask" = Relationship(back_populates="subtasks")
 
-class SubTaskCreate(SQLModel):
+class SubTaskUpdate(SQLModel):
     name : str = Field(min_length=3, max_length=255, index=True)
     desc : str = Field(max_length=2048)
-    global_task_id : int | None = Field(default=None, foreign_key="globaltask.id")
 
-class SubTaskUpdate(SubTaskCreate):
-    ...
+class SubTaskCreate(SubTaskUpdate):
+    global_task_id : int | None = Field(default=None, foreign_key="globaltask.id")
 
 class SubTaskRead(SubTaskCreate):
     id : int
