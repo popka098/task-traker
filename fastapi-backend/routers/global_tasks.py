@@ -4,7 +4,7 @@ from sqlmodel import Session, select
 from database import get_session
 
 from models.global_task import GlobalTask, GlobalTaskCreate, GlobalTaskRead, GlobalTaskUpdate
-from models.subtask import SubTask
+from models.many_to_many_links.global_task_user_link import GlobalTaskUserLink
 
 from typing import Annotated
 
@@ -18,6 +18,10 @@ def create_global_task(task: GlobalTaskCreate, session: SessionDep) -> GlobalTas
     session.add(new_task)
     session.commit()
     session.refresh(new_task)
+
+    link = GlobalTaskUserLink(user_id=new_task.resp_id, global_task_id=new_task.id)
+    session.add(link)
+    session.commit()
     return task
 
 @router.get("/", response_model=list[GlobalTaskRead])
