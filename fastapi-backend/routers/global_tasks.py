@@ -9,7 +9,7 @@ from typing import Annotated
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
-router = APIRouter(prefix="/api/globaltasks", tags=["Global Tasks"])
+router = APIRouter(prefix="/api/globaltasks", tags=["GlobalTasks"])
 
 @router.post("/", response_model=GlobalTaskCreate)
 def create_global_task(task: GlobalTaskCreate, session: SessionDep) -> GlobalTask:

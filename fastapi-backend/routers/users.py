@@ -56,36 +56,3 @@ def update_user(id: int, session: SessionDep, new_user: UserUpdate) -> User:
     session.commit()
     session.refresh(user)
     return user
-
-@router.get("/{id}/resp-globaltasks", response_model=list[GlobalTaskRead], tags=["Users with tasks"])
-def read_resp_global_tasks(id: int, session: SessionDep) -> list[GlobalTaskRead]:
-    if not session.get(User, id):
-        raise HTTPException(status_code=404, detail="User not found")
-
-    statement = select(GlobalTask).where(GlobalTask.resp_id == id)
-    res = session.exec(statement).all()
-    return res
-
-@router.post("/{id}/link-globaltask/{task_id}", response_model=GlobalTaskUserLink, tags=["Users with tasks"])
-def link_user_global_task(id: int, task_id: int, session: SessionDep) -> GlobalTaskUserLink:
-    user = session.get(User, id)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    task = session.get(GlobalTask, task_id)
-    if not task:
-        raise HTTPException(status_code=404, detail="Global task not found")
-    link_exists = session.exec(
-        select(GlobalTaskUserLink).where(
-            GlobalTaskUserLink.user_id == id,
-            GlobalTaskUserLink.global_task_id == task_id
-        )
-    ).first()
-    if link_exists:
-        raise HTTPException(status_code=404, detail="Link already exists")
-
-    link = GlobalTaskUserLink(user_id=id, global_task_id=task_id)
-    session.add(link)
-    session.commit()
-    session.refresh(link)
-
-    return link
