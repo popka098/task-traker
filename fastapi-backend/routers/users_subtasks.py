@@ -7,4 +7,4 @@ from typing import Annotated
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
-router = APIRouter(prefix="/api/users", tags=["Users", "Tasks", "SubTasks", "Users Subtasks"])
+router = APIRouter(prefix="/api/users", tags=["Users Subtasks"])
