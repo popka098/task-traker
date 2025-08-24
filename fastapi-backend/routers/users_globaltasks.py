@@ -45,3 +45,10 @@ def link_user_global_task(id: int, task_id: int, session: SessionDep) -> GlobalT
     session.refresh(link)
 
     return link
+
+@router.get("/{id}/globaltasks", response_model=list[GlobalTaskRead])
+def read_global_tasks_by_user(id: int, session: SessionDep) -> list[GlobalTaskRead]:
+    user = session.get(User, id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user.global_tasks
