@@ -54,3 +54,13 @@ def link_user_subtask(id: int, task_id: int, session: SessionDep) -> SubTaskUser
     session.commit()
     session.refresh(link)
     return link
+
+@router.delete("/{id}/subtask/{task_id}")
+def delete_user_subtask(id: int, task_id: int, session: SessionDep):
+    link = session.get(SubTaskUserLink, (task_id, id))
+    if not link:
+        raise HTTPException(status_code=404, detail="Link not found")
+
+    session.delete(link)
+    session.commit()
+    return {"ok": True}
