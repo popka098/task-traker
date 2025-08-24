@@ -22,7 +22,7 @@ def read_resp_global_tasks(id: int, session: SessionDep) -> list[GlobalTaskRead]
     res = session.exec(statement).all()
     return res
 
-@router.post("/{id}/link-globaltask/{task_id}", response_model=GlobalTaskUserLink)
+@router.post("/{id}/globaltask/{task_id}", response_model=GlobalTaskUserLink)
 def link_user_global_task(id: int, task_id: int, session: SessionDep) -> GlobalTaskUserLink:
     user = session.get(User, id)
     if not user:
@@ -52,3 +52,22 @@ def read_global_tasks_by_user(id: int, session: SessionDep) -> list[GlobalTaskRe
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user.global_tasks
+
+@router.delete("/{id}/globaltask/{task_id}")
+def delete_user_global_task(id: int, task_id: int, session: SessionDep):
+    link = session.exec(
+        select(GlobalTaskUserLink)
+        .join(GlobalTask, GlobalTask.id == GlobalTaskUserLink.global_task_id)
+        .join(User, User.id == GlobalTaskUserLink.user_id)
+        .where(
+            GlobalTaskUserLink.user_id == id,
+            GlobalTaskUserLink.global_task_id == task_id,
+            GlobalTask.resp_id != id
+        )
+    ).first()
+    if not link:
+        raise HTTPException(status_code=404, detail="Cant delete link")
+
+    session.delete(link)
+    session.commit()
+    return {"ok": True}
