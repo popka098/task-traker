@@ -1,6 +1,6 @@
-from typing import List, TYPE_CHECKING
+from typing import List
 
-from sqlmodel import Field, Relationship
+from sqlmodel import Field, Relationship, SQLModel
 from models.task import Task
 from models.many_to_many_links.subtask_user_link import SubTaskUserLink
 
@@ -21,3 +21,13 @@ class SubTask(Task, table=True):
     global_task_id : int | None = Field(default=None, foreign_key="globaltask.id")
     global_task: "GlobalTask" = Relationship(back_populates="subtasks")
 
+class SubTaskCreate(SQLModel):
+    name : str = Field(min_length=3, max_length=255, index=True)
+    desc : str = Field(max_length=2048)
+    global_task_id : int | None = Field(default=None, foreign_key="globaltask.id")
+
+class SubTaskUpdate(SubTaskCreate):
+    ...
+
+class SubTaskRead(SubTaskCreate):
+    id : int

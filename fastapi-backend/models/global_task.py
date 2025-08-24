@@ -22,7 +22,12 @@ class GlobalTask(Task, table=True):
     )
 
     # N:1 with SubTask
-    subtasks: List["SubTask"] = Relationship(back_populates="global_task")
+    subtasks: List["SubTask"] = Relationship(
+        back_populates="global_task",
+        sa_relationship_kwargs={
+            "cascade": "all, delete"
+        }
+    )
 
 class GlobalTaskCreate(SQLModel):
     name : str = Field(min_length=3, max_length=255, index=True)

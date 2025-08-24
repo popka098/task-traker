@@ -4,6 +4,7 @@ from sqlmodel import Session, select
 from database import get_session
 
 from models.global_task import GlobalTask, GlobalTaskCreate, GlobalTaskRead
+from models.subtask import SubTask
 
 from typing import Annotated
 
@@ -28,5 +29,15 @@ def read_global_tasks(session: SessionDep) -> list[GlobalTaskRead]:
 def read_global_task(id: int, session: SessionDep) -> GlobalTaskRead:
     task = session.get(GlobalTask, id)
     if not task:
-        raise HTTPException(404, "Global Task not found")
+        raise HTTPException(404, "GlobalTask not found")
     return task
+
+@router.delete("/{id}")
+def delete_global_task(id:int, session: SessionDep):
+    global_task = session.get(GlobalTask, id)
+    if not global_task:
+        raise HTTPException(404, "GlobalTask not found")
+
+    session.delete(global_task)
+    session.commit()
+    return {"ok": True}
