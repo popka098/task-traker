@@ -55,7 +55,7 @@ def update_user(id: int, session: SessionDep, new_user: UserUpdate) -> User:
     session.refresh(user)
     return user
 
-@router.get("/{username}", response_model=UserRead)
+@router.get("/username/{username}", response_model=UserRead)
 def read_user_by_username(username: str, session: SessionDep) -> UserRead:
     user = session.exec(
         select(User).where(username == User.username)

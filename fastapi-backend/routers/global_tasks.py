@@ -60,3 +60,12 @@ def update_global_task(id:int, session:SessionDep, new_task: GlobalTaskUpdate) -
     session.commit()
     session.refresh(global_task)
     return global_task
+
+@router.get("/name/{name}", response_model=list[GlobalTaskRead])
+def read_global_tasks_by_name(name: str, session: SessionDep) -> list[GlobalTaskRead]:
+    tasks = session.exec(
+        select(GlobalTask).where(GlobalTask.name == name)
+    ).all()
+    if not tasks:
+        raise HTTPException(404, "GlobalTasks not found")
+    return tasks
