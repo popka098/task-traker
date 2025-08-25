@@ -12,13 +12,13 @@ SessionDep = Annotated[Session, Depends(get_session)]
 
 router = APIRouter(prefix="/api/subtasks", tags=["SubTasks", "Tasks"])
 
-@router.post("/", response_model=SubTaskCreate)
-def create_subtask(task: SubTaskCreate, session: SessionDep) -> SubTask:
+@router.post("/", response_model=SubTaskRead)
+def create_subtask(task: SubTaskCreate, session: SessionDep) -> SubTaskRead:
     new_task = SubTask.model_validate(task)
     session.add(new_task)
     session.commit()
     session.refresh(new_task)
-    return task
+    return new_task
 
 @router.get("/", response_model=list[SubTaskRead])
 def read_global_tasks(session: SessionDep) -> list[SubTaskRead]:

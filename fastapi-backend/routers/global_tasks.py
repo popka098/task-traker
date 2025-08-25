@@ -12,8 +12,8 @@ SessionDep = Annotated[Session, Depends(get_session)]
 
 router = APIRouter(prefix="/api/globaltasks", tags=["GlobalTasks", "Tasks"])
 
-@router.post("/", response_model=GlobalTaskCreate)
-def create_global_task(task: GlobalTaskCreate, session: SessionDep) -> GlobalTask:
+@router.post("/", response_model=GlobalTaskRead)
+def create_global_task(task: GlobalTaskCreate, session: SessionDep) -> GlobalTaskRead:
     new_task = GlobalTask.model_validate(task)
     session.add(new_task)
     session.commit()
@@ -22,7 +22,7 @@ def create_global_task(task: GlobalTaskCreate, session: SessionDep) -> GlobalTas
     link = GlobalTaskUserLink(user_id=new_task.resp_id, global_task_id=new_task.id)
     session.add(link)
     session.commit()
-    return task
+    return new_task
 
 @router.get("/", response_model=list[GlobalTaskRead])
 def read_global_tasks(session: SessionDep) -> list[GlobalTaskRead]:
