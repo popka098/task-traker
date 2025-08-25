@@ -1,34 +1,34 @@
 tags_metadata = [
     {
         "name": "Users",
-        "description": "",
+        "description": "Endpoints *only* with Users",
     },
     {
         "name": "GlobalTasks",
-        "description": "",
+        "description": "Endpoints *only* with GlobalTasks",
     },
     {
         "name": "SubTasks",
-        "description": "",
+        "description": "Endpoints *only* with SubTasks",
     },
     {
         "name": "Users GlobalTasks",
-        "description": "",
+        "description": "Endpoints with Users and GlobalTasks",
     },
     {
         "name": "Users SubTasks",
-        "description": "",
+        "description": "Endpoints with Users and SubTasks",
     },
     {
         "name": "GlobalTasks SubTasks",
-        "description": "",
+        "description": "Endpoints with GlobalTasks and SubTasks",
     },
     {
         "name": "Tasks",
-        "description": "",
+        "description": "GlobalTasks and SubTasks",
     },
     {
         "name": "Main endpoints",
-        "description": "",
+        "description": "Other",
     },
 ]
