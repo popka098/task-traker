@@ -11,3 +11,4 @@ class Task(BaseModel):
     """
     name : str = Field(min_length=3, max_length=255, index=True)
     desc : str = Field(max_length=2048)
+    is_completed : bool = Field(default=False)
