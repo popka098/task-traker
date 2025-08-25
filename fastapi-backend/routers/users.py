@@ -12,12 +12,12 @@ SessionDep = Annotated[Session, Depends(get_session)]
 router = APIRouter(prefix="/api/users", tags=["Users"])
 
 @router.post("/", response_model=UserCreate)
-def create_user(user: UserCreate, session: SessionDep) -> User:
+def create_user(user: UserCreate, session: SessionDep) -> UserRead:
     new_user = User.model_validate(user)
     session.add(new_user)
     session.commit()
     session.refresh(new_user)
-    return user
+    return new_user
 
 @router.get("/", response_model=list[UserRead])
 def read_users(session: SessionDep) -> list[UserRead]:

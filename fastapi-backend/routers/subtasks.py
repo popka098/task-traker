@@ -4,6 +4,7 @@ from sqlmodel import Session, select
 from database import get_session
 
 from models.subtask import SubTask, SubTaskCreate, SubTaskUpdate, SubTaskRead
+from models.global_task import GlobalTask
 
 from typing import Annotated
 
@@ -52,6 +53,26 @@ def update_global_task(id:int, session:SessionDep, new_task: SubTaskUpdate) -> S
         setattr(subtask, key, value)
 
     session.add(subtask)
+    session.commit()
+    session.refresh(subtask)
+    return subtask
+
+@router.patch("/{id}/complete")
+def complete_subtask(id: int, session:SessionDep):
+    subtask = session.get(SubTask, id)
+    if not subtask:
+        raise HTTPException(404, "SubTask not found")
+    subtask.is_completed = True
+    session.add(subtask)
+
+    tasks = session.exec(
+        select(SubTask).where(SubTask.global_task_id == subtask.global_task_id)
+    ).all()
+    if all(t.is_completed for t in tasks):
+        global_task = session.get(GlobalTask, subtask.global_task_id)
+        global_task.is_completed = True
+        session.add(global_task)
+
     session.commit()
     session.refresh(subtask)
     return subtask

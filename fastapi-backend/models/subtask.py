@@ -30,3 +30,4 @@ class SubTaskCreate(SubTaskUpdate):
 
 class SubTaskRead(SubTaskCreate):
     id : int
+    is_completed : bool

@@ -39,3 +39,4 @@ class GlobalTaskUpdate(GlobalTaskCreate):
 
 class GlobalTaskRead(GlobalTaskCreate):
     id : int
+    is_completed : bool
