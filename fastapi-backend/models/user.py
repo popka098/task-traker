@@ -27,7 +27,8 @@ class User(BaseModel, table=True):
     username : str = Field(
         min_length=3,
         max_length=255,
-        unique=True
+        unique=True,
+        index=True
     )
     email : EmailStr = Field(unique=True)
     is_staff : bool = Field(default=False)

@@ -54,3 +54,13 @@ def update_user(id: int, session: SessionDep, new_user: UserUpdate) -> User:
     session.commit()
     session.refresh(user)
     return user
+
+@router.get("/{username}", response_model=UserRead)
+def read_user_by_username(username: str, session: SessionDep) -> UserRead:
+    user = session.exec(
+        select(User).where(username == User.username)
+    ).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user
