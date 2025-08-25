@@ -9,6 +9,8 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from routers.main_router import api_router
+from tags_metadata import tags_metadata
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -18,7 +20,10 @@ async def lifespan(app: FastAPI):
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    openapi_tags=tags_metadata,
+)
 
 app.include_router(api_router)
 

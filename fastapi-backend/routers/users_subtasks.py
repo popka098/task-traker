@@ -13,7 +13,7 @@ from typing import Annotated
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
-router = APIRouter(prefix="/api/users", tags=["Users Subtasks"])
+router = APIRouter(prefix="/api/users", tags=["Users SubTasks"])
 
 @router.get("/{id}/subtasks", response_model=list[SubTaskRead])
 def read_global_tasks_by_user(id: int, session: SessionDep) -> list[SubTaskRead]:
